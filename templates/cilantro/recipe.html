@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body_block %}
+        <h1 class="page-header">{{ recipe_name }}</h1>{{ recipe.servings }} Servings<br /><br />
+        <ul>
+        {% for ing in ingredients %}
+            <li>{{ ing.name }} - {{ ing.amount }}</li>
+        {% endfor %}
+        </ul>
+        <p>{{ recipe.instructions }}</p>
+
+{% endblock %}
