@@ -23,7 +23,7 @@ class Recipe(models.Model):
     # TODO: the name of recipes should not be unique, but it should be unique to its category.
     name = models.CharField(max_length=400)
     instructions = models.TextField()
-    servings = models.IntegerField(blank=True)
+    servings = models.IntegerField(blank=True, default=2)
     slug = models.SlugField()
 
     def save(self, *args, **kwargs):
@@ -34,17 +34,23 @@ class Recipe(models.Model):
         return self.name
 
 
-"""class ArchetypeIngredient(models.Model):
+class Ingredient(models.Model):
+    """Ingredient 'archetype'."""
     name = models.CharField(max_length=128, unique=True)
+    plural = models.CharField(max_length=128, blank=True)
+
+    """def save(self, *args, **kwargs):
+
+        super(Ingredient, self).save(*args, **kwargs)"""
 
     def __unicode__(self):
-        return self.name"""
+        return self.name
 
 
-class Ingredient(models.Model):
-    # TODO: many to many relationship? Is there a way to decouple the amount from the ingredient?
-    recipe = models.ForeignKey(Recipe)
+class RecipeIngredient(models.Model):
+    """Each RecipeIngredient is 1. a certain ingredient e.g. 'Tomato' and 2. an amount e.g. '400g'."""
     name = models.CharField(max_length=128)
+    recipe = models.ForeignKey(Recipe)
     amount = models.CharField(max_length=40, blank=True)
     unit = models.CharField(max_length=40, blank=True, default="")
 
@@ -55,9 +61,7 @@ class Ingredient(models.Model):
         unit = pattern.search(str(self.amount))
         if unit:
             self.unit = unit.groups()[1]
-        else:
-            self.unit = ''
-        super(Ingredient, self).save(*args, **kwargs)
+        super(RecipeIngredient, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.name

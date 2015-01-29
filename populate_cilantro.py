@@ -6,7 +6,7 @@ import django
 
 django.setup()
 
-from cilantro.models import Category, Recipe, Ingredient
+from cilantro.models import Category, Recipe, RecipeIngredient, Ingredient
 
 
 def populate():
@@ -19,10 +19,12 @@ def populate():
     add_ingr(recipe=pasta, name="Tomato", amount="400g")
     add_ingr(recipe=pasta, name="Chilies", amount="4")
 
+    populate_ingredients()
+
     # Print out what we have added to the user.
     for c in Category.objects.all():
         for r in Recipe.objects.filter(category=c):
-            for t in Ingredient.objects.filter(recipe=r):
+            for t in RecipeIngredient.objects.filter(recipe=r):
                 print "- {0} - {1} - {2}".format(str(c), str(r), str(t))
 
 
@@ -37,8 +39,17 @@ def add_cat(name):
 
 
 def add_ingr(recipe, name, amount):
-    t = Ingredient.objects.get_or_create(recipe=recipe, name=name, amount=amount)[0]
+    t = RecipeIngredient.objects.get_or_create(recipe=recipe, name=name, amount=amount)[0]
     return t
+
+
+def populate_ingredients():
+    for i in RecipeIngredient.objects.all():
+        ing, created = Ingredient.objects.get_or_create(name=i.name.lower())
+        if created:
+            print "Ingredient %s created" % str(ing.name)
+        else:
+            print "Ingredient %s found!" % str(ing.name)
 
 # Start execution here!
 if __name__ == '__main__':

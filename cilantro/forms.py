@@ -9,3 +9,7 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ('name',)
+
+
+class RecipeForm(forms.ModelForm):
+    name = forms.CharField(max_length=128, help_text="Name: ")

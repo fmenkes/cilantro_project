@@ -1,12 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body_block %}
-        <h1 class="page-header">{{ recipe_name }}</h1>{{ recipe.servings }} Servings<br /><br />
-        <ul>
+        <div class="page-header"><h1>{{ recipe_name }}</h1></div>
+        <div class="col-md-6">{{ recipe.servings }} Servings<br /><br />
+        <table style="max-width:100%" class="table table-responsive">
+        <thead><tr><th>Ingredients</th></tr></thead>
+        <tbody>
         {% for ing in ingredients %}
-            <li>{{ ing.name }} - {{ ing.amount }}</li>
+            <tr>
+                <td width="30%">{{ ing.amount }}</td>
+                <td width="70%">{{ ing.name }}</td>
+            </tr>
         {% endfor %}
-        </ul>
+        </tbody>
+        </table>
         <p>{{ recipe.instructions }}</p>
+        </div>
 
 {% endblock %}

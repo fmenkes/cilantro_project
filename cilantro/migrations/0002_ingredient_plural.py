@@ -13,8 +13,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='ingredient',
-            name='unit',
-            field=models.CharField(default=b'', max_length=20, blank=True),
-            preserve_default=True,
+            name='plural',
+            field=models.CharField(default='default', max_length=128),
+            preserve_default=False,
         ),
     ]

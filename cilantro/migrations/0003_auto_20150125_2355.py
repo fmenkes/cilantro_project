@@ -7,14 +7,14 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('cilantro', '0004_auto_20150103_1212'),
+        ('cilantro', '0002_ingredient_plural'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='recipe',
-            name='name',
-            field=models.CharField(max_length=400),
+            model_name='ingredient',
+            name='plural',
+            field=models.CharField(max_length=128, blank=True),
             preserve_default=True,
         ),
     ]

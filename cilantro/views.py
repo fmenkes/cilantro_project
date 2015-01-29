@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from cilantro.models import Recipe, Category, Ingredient
+from cilantro.models import Recipe, Category, RecipeIngredient
 from cilantro.forms import CategoryForm
 
 
@@ -14,7 +14,7 @@ def recipe(request, category_name_slug, recipe_name_slug):
         recipe = Recipe.objects.filter(category=category).get(slug=recipe_name_slug)
         context_dict['recipe'] = recipe
         context_dict['recipe_name'] = recipe.name
-        context_dict['ingredients'] = Ingredient.objects.filter(recipe=recipe)
+        context_dict['ingredients'] = RecipeIngredient.objects.filter(recipe=recipe)
     except Recipe.DoesNotExist or Category.DoesNotExist:
         context_dict['recipe_name'] = "Not Found"
 
@@ -50,3 +50,20 @@ def add_category(request):
         form = CategoryForm()
 
     return render(request, 'cilantro/add_category.html', {'form': form})
+
+
+def add_recipe(request):
+    if request.method == 'POST':
+        form = RecipeForm(request.POST)
+
+        if form.is_valid():
+            form.save(commit=True)
+
+            return index(request)
+        else:
+            print form.errors
+
+    else:
+        form = RecipeForm()
+
+    return render(request, 'cilantro/add_page.html', {'form': form})
