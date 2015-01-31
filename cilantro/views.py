@@ -22,6 +22,7 @@ def recipe(request, category_name_slug, recipe_name_slug):
 
 
 def category(request, category_name_slug):
+    """obsolete?"""
     context_dict = {}
     try:
         category = Category.objects.get(slug=category_name_slug)
@@ -52,7 +53,7 @@ def add_category(request):
     return render(request, 'cilantro/add_category.html', {'form': form})
 
 
-def add_recipe(request):
+"""def add_recipe(request):
     if request.method == 'POST':
         form = RecipeForm(request.POST)
 
@@ -66,4 +67,4 @@ def add_recipe(request):
     else:
         form = RecipeForm()
 
-    return render(request, 'cilantro/add_page.html', {'form': form})
+    return render(request, 'cilantro/add_recipe.html', {'form': form})"""

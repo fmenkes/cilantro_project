@@ -1,0 +1,27 @@
+.recipe-item {
+    position: relative;
+    display: block;
+    font-size: small;
+    text-indent: 45px;
+    margin-left: -40px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.recipe-item > a:hover,
+.recipe-item > a:focus {
+    text-decoration: none;
+    background-color: #eee;
+
+}
+
+.recipe-ul {
+    display: none;
+}
+
+#cilantro-navbar {
+    background-color: #004a0d;
+    font-family: cursive;
+}
+
+

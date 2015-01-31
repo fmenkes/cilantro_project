@@ -1,14 +1,20 @@
+<ul class="nav nav-sidebar">
 {% if cats %}
-   <ul class="nav nav-sidebar">
+
        {% for c in cats %}
            {% if c == act_cat %}
                <li class="active">
            {% else %}
                <li>
            {% endif %}
-               <a href="{% url 'category' c.slug %}">{{ c.name }}</a></li>
+               <!--a href="{% url 'category' c.slug %}"--><a class="category-item" href="#">{{ c.name }}</a>
+                       <ul class="recipe-ul">{% for r in recipes %}
+                       {% if r.category == c %}
+                        <li class="recipe-item"><a href="{% url 'recipe' c.slug r.slug %}">{{ r.name }}</a></li>
+                       {% endif %}
+                       {% endfor %}</ul></li>
        {% endfor %}
 {% else %}
        <li><strong>There are no categories present.</strong></li>
-   </ul>
 {% endif %}
+    </ul>
