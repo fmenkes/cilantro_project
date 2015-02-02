@@ -21,7 +21,7 @@ class Category(models.Model):
 class Recipe(models.Model):
     category = models.ForeignKey(Category)
     # TODO: the name of recipes should not be unique, but it should be unique to its category.
-    name = models.CharField(max_length=400)
+    name = models.CharField(max_length=400, unique=True)
     instructions = models.TextField()
     servings = models.IntegerField(blank=True, default=2)
     slug = models.SlugField()
@@ -52,15 +52,17 @@ class RecipeIngredient(models.Model):
     name = models.CharField(max_length=128)
     recipe = models.ForeignKey(Recipe)
     amount = models.CharField(max_length=40, blank=True)
+    value = models.IntegerField(blank=True, default=0)
     unit = models.CharField(max_length=40, blank=True, default="")
 
     def save(self, *args, **kwargs):
         """finds the unit in the amount and saves it to the (hidden) unit field."""
         # This regex needs lots of work!
-        pattern = re.compile(r'\d+(\s|\W)*(\D*)$')
-        unit = pattern.search(str(self.amount))
-        if unit:
-            self.unit = unit.groups()[1]
+        pattern = re.compile(r'(\d+)(\s|\W)*(\D*)$')
+        result = pattern.search(str(self.amount))
+        if result:
+            self.unit = result.groups()[2]
+            self.value = result.groups()[0]
         super(RecipeIngredient, self).save(*args, **kwargs)
 
     def __unicode__(self):

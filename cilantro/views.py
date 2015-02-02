@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from cilantro.models import Recipe, Category, RecipeIngredient
-from cilantro.forms import CategoryForm
+from cilantro.forms import CategoryForm, RecipeForm, RecipeIngredientForm
+from django.forms.formsets import formset_factory
+import pdb
 
 
 def index(request):
@@ -12,8 +14,8 @@ def recipe(request, category_name_slug, recipe_name_slug):
     try:
         category = Category.objects.get(slug=category_name_slug)
         recipe = Recipe.objects.filter(category=category).get(slug=recipe_name_slug)
+        context_dict['category'] = category
         context_dict['recipe'] = recipe
-        context_dict['recipe_name'] = recipe.name
         context_dict['ingredients'] = RecipeIngredient.objects.filter(recipe=recipe)
     except Recipe.DoesNotExist or Category.DoesNotExist:
         context_dict['recipe_name'] = "Not Found"
@@ -53,18 +55,32 @@ def add_category(request):
     return render(request, 'cilantro/add_category.html', {'form': form})
 
 
-"""def add_recipe(request):
+def add_recipe(request):
+    recipe_formset = formset_factory(RecipeIngredientForm, extra=10)
     if request.method == 'POST':
-        form = RecipeForm(request.POST)
+        recipe_form = RecipeForm(request.POST)
+        ingredients_form = recipe_formset(request.POST)
 
-        if form.is_valid():
-            form.save(commit=True)
+        if recipe_form.is_valid():
+            recipe_name = recipe_form.cleaned_data['name']
 
-            return index(request)
+            if ingredients_form.is_valid():
+                recipe_form.save(commit=True)
+
+                for form in ingredients_form.forms:
+                    #pdb.set_trace()
+                    if form.cleaned_data:
+                        form.instance.recipe = Recipe.objects.get(name=recipe_name)
+                        form.save(commit=True)
+
+                return index(request)
+            else:
+                print ingredients_form.errors
         else:
-            print form.errors
+            print recipe_form.errors
 
     else:
-        form = RecipeForm()
+        recipe_form = RecipeForm()
+        ingredients_form = recipe_formset()
 
-    return render(request, 'cilantro/add_recipe.html', {'form': form})"""
+    return render(request, 'cilantro/add_recipe.html', {'form': recipe_form, 'formset': ingredients_form})

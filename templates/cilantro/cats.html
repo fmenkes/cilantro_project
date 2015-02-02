@@ -1,17 +1,21 @@
 <ul class="nav nav-sidebar">
 {% if cats %}
-
-       {% for c in cats %}
+    {% for c in cats %}
            {% if c == act_cat %}
                <li class="active">
            {% else %}
                <li>
            {% endif %}
                <!--a href="{% url 'category' c.slug %}"--><a class="category-item" href="#">{{ c.name }}</a>
-                       <ul class="recipe-ul">{% for r in recipes %}
-                       {% if r.category == c %}
-                        <li class="recipe-item"><a href="{% url 'recipe' c.slug r.slug %}">{{ r.name }}</a></li>
+                       {% if c == act_cat %}
+                           <ul>
+                       {% else %}
+                           <ul class="recipe-ul">
                        {% endif %}
+                       {% for r in recipes %}
+                           {% if r.category == c %}
+                               <li class="recipe-item"><a href="{% url 'recipe' c.slug r.slug %}">{{ r.name }}</a></li>
+                           {% endif %}
                        {% endfor %}</ul></li>
        {% endfor %}
 {% else %}

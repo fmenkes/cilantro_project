@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/cilantro_project.iml" filepath="$PROJECT_DIR$/.idea/cilantro_project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../workspace/diogenes_project/.idea/diogenes_project.iml" filepath="$PROJECT_DIR$/../../workspace/diogenes_project/.idea/diogenes_project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../workspace/tango_with_django_project/.idea/tango_with_django_project.iml" filepath="$PROJECT_DIR$/../../workspace/tango_with_django_project/.idea/tango_with_django_project.iml" />
     </modules>
   </component>
 </project>
