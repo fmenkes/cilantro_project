@@ -68,7 +68,6 @@ def add_recipe(request):
                 recipe_form.save(commit=True)
 
                 for form in ingredients_form.forms:
-                    #pdb.set_trace()
                     if form.cleaned_data:
                         form.instance.recipe = Recipe.objects.get(name=recipe_name)
                         form.save(commit=True)
