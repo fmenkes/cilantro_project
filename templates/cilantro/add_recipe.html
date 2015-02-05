@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
     {% block body_block %}
-        <h1 class = "page-header">Add Recipe</h1>
-            <form role="form" id="recipe_form" method="post" action="/cilantro/add_recipe/">
+        <div class="cilantro-header"><h1>Add recipe to {{category.name}}</h1></div>
+            <form role="form" id="recipe_form" method="post" action="/cilantro/{{category.slug}}/add_recipe/">
             {% csrf_token %}
-            <div class="row col-md-6">
+            <div class="recipe-left">
             {% for hidden in form.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
@@ -15,31 +15,18 @@
             {% endfor %}
             <button class="btn btn-primary" type="submit" name="submit">Add Recipe</button>
                 </div>
-                <div class="row col-md-6 ingredient-form">
-                    <table class="table">
-                    <thead>
-                    <tr>
-                    <th>Ingredients:</th>
-                    <th>Amounts:</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                <div class="recipe-right">
+                    Ingredient/Amount<br/>
                     {{ formset.management_form }}
                     {% for form in formset %}
-                    {% for hidden in form.hidden_fields %}
-                        {{ hidden }}
-                    {% endfor %}
-                    <tr>
-                        {% for field in form.visible_fields %}
-                        <td>{{ field.errors }}
-                            {{ field }}</td>
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
                         {% endfor %}
-                    </tr>
+                        {% for field in form.visible_fields %}
+                            {{ field.errors }}
+                            {{ field }}
+                        {% endfor %}<br/><br/>
                     {% endfor %}
-
-                    </tbody>
-                    </table>
-
                 </div>
 
         </form>

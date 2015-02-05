@@ -15,8 +15,9 @@ body {
  */
 
 .cilantro-header {
-  padding-bottom: 10px;
+  padding-bottom: 0px;
   border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
 }
 
 /*
@@ -39,7 +40,7 @@ body {
   .sidebar {
     position: relative;
     float: left;
-    height: 950px;
+    height: 980px;
     top: 0px;
     bottom: 0;
     left: 0;
@@ -136,5 +137,22 @@ body {
     border-radius: 4px;
 }
 
+.recipe-left {
+    float:left;
+}
+
+.recipe-right {
+    margin-left: 40px;
+    position: relative;
+    width: auto;
+    float:left;
+}
+
+.btn-delete {
+    float:right;
+    position: relative;
+    margin-top: 5px;
+    margin-right: 5px;
+}
 
 

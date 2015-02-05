@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body_block %}
-        <h1 class="cilantro-header">{{ recipe.name }}</h1>
+        {% if recipe %}
+        <div class="cilantro-header"><h1>{{ recipe.name }}</h1><button class="btn btn-danger btn-xs btn-delete" data-recipeid="{{ recipe.id }}">X</button></div>
         <div class="col-md-6">{% csrf_token %}<input style="border:1px solid #ccc;border-radius:4px" value="{{recipe.servings}}" size="3" maxlength="3"/> Servings<br /><br />
         <table class="table table-responsive">
         <thead><tr><th>Ingredients</th></tr></thead>
@@ -16,5 +17,8 @@
         </table>
         <p>{{ recipe.instructions }}</p>
         </div>
+        {% else %}
+        <div class="cilantro-header">{{ not_found }} does not exist.</div>
+        {% endif %}
 
 {% endblock %}
