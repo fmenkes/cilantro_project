@@ -1,6 +1,7 @@
 <ul class="nav nav-sidebar">
 {% if cats %}
     {% for c in cats %}
+        {% if c.name != "Shopping Lists" %}
            {% if c == act_cat %}
                <li class="active">
            {% else %}
@@ -20,6 +21,7 @@
                        {% endfor %}
                                <li class="recipe-item"><a href="{% url 'add_recipe' c.slug %}">Add Recipe</a></li>
                            </ul></li>
+        {% endif %}
        {% endfor %}
 {% else %}
        <li><strong>There are no categories present.</strong></li>

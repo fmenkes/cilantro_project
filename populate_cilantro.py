@@ -11,8 +11,10 @@ from cilantro.models import Category, Recipe, RecipeIngredient, Ingredient
 
 def populate():
     mains_cat = add_cat("Mains")
+    shopping_list_cat = add_cat("Shopping Lists")
 
     pasta = add_recipe(mains_cat, "Pasta Arrabiata", "Boil the Pasta")
+    shopping_list = add_recipe(shopping_list_cat, "Shopping List")
 
     add_ingr(recipe=pasta, name="Garlic", amount="4 cloves")
     add_ingr(recipe=pasta, name="Pasta", amount="250g")
@@ -28,7 +30,7 @@ def populate():
                 print "- {0} - {1} - {2}".format(str(c), str(r), str(t))
 
 
-def add_recipe(cat, name, instr):
+def add_recipe(cat, name, instr=""):
     r = Recipe.objects.get_or_create(category=cat, name=name, instructions=instr)[0]
     return r
 
@@ -47,9 +49,9 @@ def populate_ingredients():
     for i in RecipeIngredient.objects.all():
         ing, created = Ingredient.objects.get_or_create(name=i.name.lower())
         if created:
-            print "Ingredient %s created" % str(ing.name)
+            print "Ingredient %s created" % ing.name
         else:
-            print "Ingredient %s found!" % str(ing.name)
+            print "Ingredient %s found!" % ing.name
 
 # Start execution here!
 if __name__ == '__main__':

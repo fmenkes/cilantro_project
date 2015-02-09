@@ -16,6 +16,7 @@
         </tbody>
         </table>
         <p>{{ recipe.instructions }}</p>
+        <button data-recipeid="{{ recipe.id }}" class="btn btn-shopping">Add to Shopping List</button>
         </div>
         {% else %}
         <div class="cilantro-header">{{ not_found }} does not exist.</div>

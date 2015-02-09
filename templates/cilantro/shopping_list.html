@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+        {% load cilantro_extras %}
+        {% block body_block %}
+        <div class="cilantro-header"><h1>Your Shopping List</h1></div>
+        {% if ingredients %}
+        <div id="shoplist">
+        {% for i in ingredients %}
+        <label>{{ i.name }}</label>
+            {% if i.value %}
+            <input type="text" value="{{ i.value }}" size="8"/><strong>{{ i.unit }}</strong>
+            {% endif %}
+            <br/><br/>
+        {% endfor %}
+        <button class="btn btn-clear-list">Clear Shopping List</button>
+        </div>
+        <p id="emptylist" style="display:none"><strong>Your shopping list is empty.</strong></p>
+        {% else %}
+        <strong>Your shopping list is empty.</strong>
+        {% endif %}
+        {% endblock %}

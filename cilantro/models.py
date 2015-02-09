@@ -22,7 +22,7 @@ class Recipe(models.Model):
     category = models.ForeignKey(Category)
     # TODO: the name of recipes should not be unique, but it should be unique to its category.
     name = models.CharField(max_length=400, unique=True)
-    instructions = models.TextField()
+    instructions = models.TextField(blank=True)
     servings = models.IntegerField(blank=True, default=2)
     slug = models.SlugField()
 

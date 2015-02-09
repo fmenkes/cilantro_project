@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from cilantro.models import Recipe, Category, RecipeIngredient
 from cilantro.forms import CategoryForm, RecipeForm, RecipeIngredientForm
 from django.forms.formsets import formset_factory
-from django.shortcuts import HttpResponseRedirect
+from django.shortcuts import HttpResponse
 from evernote.api.client import EvernoteClient
 import evernote.edam.type.ttypes as types
 import pdb
@@ -30,7 +30,7 @@ def send_recipe_to_evernote(request):
     note = types.Note()
     note.title = "I'm a test note!"
     note.content = '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">'
-    note.content += '<en-note>Hello, world! I was sent from %s.</en-note>' % request.get_full_path
+    note.content += '<en-note>Hello, world! I was sent from Cilantro.</en-note>'
     note_store.createNote(note)
 
     return render(request, 'cilantro/index.html')
@@ -124,3 +124,39 @@ def delete_recipe(request):
 
     # TODO: This doesn't seem to work for some reason?
     return render(request, 'cilantro/index.html', {})
+
+
+def add_to_shopping_list(request):
+    #pdb.set_trace()
+    recipe_to_add = None
+    shoplist = Recipe.objects.get(name="Shopping List")
+    if request.method == 'GET':
+        r_id = request.GET['recipe_id']
+        recipe_to_add = Recipe.objects.get(id=r_id)
+    if recipe_to_add:
+        ingredient_list = RecipeIngredient.objects.filter(recipe=recipe_to_add)
+        for ingredient in ingredient_list:
+            # This needs to be improved by checking it with Ingredient archetype
+            ing, created = RecipeIngredient.objects.get_or_create(recipe=shoplist, name=ingredient.name)
+            ing.value += ingredient.value
+            ing.unit = ingredient.unit
+            ing.save()
+
+    return HttpResponse(recipe_to_add.name)
+
+
+def clear_shopping_list(request):
+    shoplist = Recipe.objects.get(name="Shopping List")
+    for ingredient in RecipeIngredient.objects.filter(recipe=shoplist):
+        ingredient.delete()
+
+    return HttpResponse(request)
+
+
+def shopping_list(request):
+    context_dict = {}
+    shopping = Recipe.objects.get(name="Shopping List")
+    context_dict['recipe'] = shopping
+    context_dict['ingredients'] = RecipeIngredient.objects.filter(recipe=shopping)
+
+    return render(request, 'cilantro/shopping_list.html', context_dict)
