@@ -1,10 +1,12 @@
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.contrib.auth.models import User
 
 import re
 
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)
+    user = models.ForeignKey(User)
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
@@ -20,10 +22,12 @@ class Category(models.Model):
 
 class Recipe(models.Model):
     category = models.ForeignKey(Category)
+    user = models.ForeignKey(User)
     # TODO: the name of recipes should not be unique, but it should be unique to its category.
     name = models.CharField(max_length=400, unique=True)
     instructions = models.TextField(blank=True)
     servings = models.IntegerField(blank=True, default=2)
+    is_shopping_list = models.BooleanField(default=False)
     slug = models.SlugField()
 
     def save(self, *args, **kwargs):

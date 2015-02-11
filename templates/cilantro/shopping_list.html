@@ -11,7 +11,7 @@
             {% endif %}
             <br/><br/>
         {% endfor %}
-        <button class="btn btn-clear-list">Clear Shopping List</button>
+        <button class="btn btn-clear-list" data-userid="{{ user.id }}">Clear Shopping List</button>
         </div>
         <p id="emptylist" style="display:none"><strong>Your shopping list is empty.</strong></p>
         {% else %}

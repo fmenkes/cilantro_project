@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
 from cilantro.models import Recipe, Category, RecipeIngredient
 from cilantro.forms import CategoryForm, RecipeForm, RecipeIngredientForm
 from django.forms.formsets import formset_factory
@@ -36,7 +37,7 @@ def send_recipe_to_evernote(request):
     return render(request, 'cilantro/index.html')
 
 
-def recipe(request, category_name_slug, recipe_name_slug):
+def recipe(request, username, category_name_slug, recipe_name_slug):
     context_dict = {}
     try:
         category = Category.objects.get(slug=category_name_slug)
@@ -129,11 +130,15 @@ def delete_recipe(request):
 def add_to_shopping_list(request):
     #pdb.set_trace()
     recipe_to_add = None
-    shoplist = Recipe.objects.get(name="Shopping List")
+    shoplist = None
+
     if request.method == 'GET':
         r_id = request.GET['recipe_id']
+        u_id = request.GET['user_id']
+        user = User.objects.get(id=u_id)
         recipe_to_add = Recipe.objects.get(id=r_id)
-    if recipe_to_add:
+        shoplist = Recipe.objects.get(user=user, is_shopping_list=True)
+    if recipe_to_add and shoplist:
         ingredient_list = RecipeIngredient.objects.filter(recipe=recipe_to_add)
         for ingredient in ingredient_list:
             # This needs to be improved by checking it with Ingredient archetype
@@ -146,17 +151,25 @@ def add_to_shopping_list(request):
 
 
 def clear_shopping_list(request):
-    shoplist = Recipe.objects.get(name="Shopping List")
-    for ingredient in RecipeIngredient.objects.filter(recipe=shoplist):
-        ingredient.delete()
+    shoplist = None
+
+    if request.method == 'GET':
+        u_id = request.GET['user_id']
+        user = User.objects.get(id=u_id)
+        shoplist = Recipe.objects.get(user=user, is_shopping_list=True)
+
+    if shoplist:
+        for ingredient in RecipeIngredient.objects.filter(recipe=shoplist):
+            ingredient.delete()
 
     return HttpResponse(request)
 
 
-def shopping_list(request):
+def shopping_list(request, username):
     context_dict = {}
-    shopping = Recipe.objects.get(name="Shopping List")
-    context_dict['recipe'] = shopping
-    context_dict['ingredients'] = RecipeIngredient.objects.filter(recipe=shopping)
+    user = User.objects.get_by_natural_key(username)
+    shoplist = Recipe.objects.get(user=user, is_shopping_list=True)
+    context_dict['recipe'] = shoplist
+    context_dict['ingredients'] = RecipeIngredient.objects.filter(recipe=shoplist)
 
     return render(request, 'cilantro/shopping_list.html', context_dict)

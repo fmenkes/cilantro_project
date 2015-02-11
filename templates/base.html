@@ -38,16 +38,23 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="{% url 'shopping_list' %}">Shopping List</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'shopping_list' user %}">Shopping List</a></li>
             <li><a href="{% url 'add_category' %}">Add Category</a></li>
+            <li><a href="{% url 'auth_logout' %}?next=/cilantro/">Log Out</a></li>
+            {% else %}
+            <li><a href="{% url 'auth_login' %}">Login</a></li>
+            {% endif %}
           </ul>
        </div>
     </nav>
+        {% if user.is_authenticated %}
         <div class="sidebar">
           {% block side_block %}
-          {% get_category_list category %}
+          {% get_category_list user category %}
           {% endblock %}
         </div>
+        {% endif %}
         <div class="main">
           {% block body_block %}
           {% endblock %}

@@ -8,7 +8,6 @@
                <li>
            {% endif %}
                <a class="category-item" href="#">{{ c.name }}</a>
-                       {# figure out how to make this check if we are currently on add_recipe or not #}
                        {% if c == act_cat %}
                            <ul>
                        {% else %}
@@ -16,7 +15,7 @@
                        {% endif %}
                        {% for r in recipes %}
                            {% if r.category == c %}
-                               <li class="recipe-item"><a href="{% url 'recipe' c.slug r.slug %}">{{ r.name }}</a></li>
+                               <li class="recipe-item"><a href="{% url 'recipe' user.username c.slug r.slug %}">{{ r.name }}</a></li>
                            {% endif %}
                        {% endfor %}
                                <li class="recipe-item"><a href="{% url 'add_recipe' c.slug %}">Add Recipe</a></li>

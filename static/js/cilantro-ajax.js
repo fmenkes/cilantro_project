@@ -8,13 +8,17 @@ $(".btn-delete").click(function() {
 
 $(".btn-shopping").click(function() {
     var recipeid;
+    var userid;
     recipeid = $(this).attr("data-recipeid");
-    $.get('/cilantro/add_to_shopping_list/', {recipe_id: recipeid});
+    userid = $(this).attr("data-userid");
+    $.get('/cilantro/add_to_shopping_list/', {recipe_id: recipeid, user_id: userid});
 });
 
 $(".btn-clear-list").click(function() {
     if (confirm('Clear shopping list?')) {
-    $.get('/cilantro/clear_shopping_list/', function(data){
+    var userid
+    userid = $(this).attr("data-userid");
+    $.get('/cilantro/clear_shopping_list/', {user_id: userid}, function(data){
         $('#shoplist').hide();
         $('#emptylist').show();
     });
