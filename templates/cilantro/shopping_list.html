@@ -4,13 +4,34 @@
         <div class="cilantro-header"><h1>Your Shopping List</h1></div>
         {% if ingredients %}
         <div id="shoplist">
-        {% for i in ingredients %}
-        <label>{{ i.name }}</label>
-            {% if i.value %}
-            <input type="text" value="{{ i.value }}" size="8"/><strong>{{ i.unit }}</strong>
-            {% endif %}
-            <br/><br/>
-        {% endfor %}
+        <form method="post" action=".">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        <table class="table table-striped" id="shopping-table">
+    <thead>
+      <tr>
+        <th>Exclude?</th>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Unit</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for form in formset.forms %}
+      <tr>
+        <td>
+          {{ form.id }}
+          {{ form.is_checked }}
+        </td>
+        <td>{{ form.name }}</td>
+        <td>{{ form.value }}</td>
+        <td>{{ form.unit }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+        <button class="btn" type="submit" name="submit">Send to Evernote</button>
+        </form>
         <button class="btn btn-clear-list" data-userid="{{ user.id }}">Clear Shopping List</button>
         </div>
         <p id="emptylist" style="display:none"><strong>Your shopping list is empty.</strong></p>

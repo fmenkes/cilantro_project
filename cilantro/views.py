@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from cilantro.models import Recipe, Category, RecipeIngredient
-from cilantro.forms import CategoryForm, RecipeForm, RecipeIngredientForm
+from cilantro.forms import CategoryForm, RecipeForm, RecipeIngredientForm, ShoppingListFormSet
 from django.forms.formsets import formset_factory
 from django.shortcuts import HttpResponse
 from evernote.api.client import EvernoteClient
 import evernote.edam.type.ttypes as types
+import re
 import pdb
+
+#TODO: HOW COULD YOU FORGET ABOUT REQUEST.USER GODDAMN
 
 
 def index(request):
@@ -24,7 +27,8 @@ def evernote(request):
     return render(request, 'cilantro/evernote.html', context_dict)
 
 
-def send_recipe_to_evernote(request):
+def send_shopping_to_evernote(request):
+    #pdb.set_trace()
     dev_token = "***REMOVED***"
     client = EvernoteClient(token=dev_token)
     note_store = client.get_note_store()
@@ -169,7 +173,35 @@ def shopping_list(request, username):
     context_dict = {}
     user = User.objects.get_by_natural_key(username)
     shoplist = Recipe.objects.get(user=user, is_shopping_list=True)
-    context_dict['recipe'] = shoplist
-    context_dict['ingredients'] = RecipeIngredient.objects.filter(recipe=shoplist)
+    ingredients = RecipeIngredient.objects.filter(recipe=shoplist)
+    if request.method == 'POST':
+        formset = ShoppingListFormSet(request.POST, queryset=ingredients)
+        if formset.is_valid():
+            for form in formset.forms:
+                if form.cleaned_data.get('is_checked'):
+                    instance = form.save(commit=False)
+                    instance.delete()
+                else:
+                    form.save(commit=True)
+        send_to_evernote(ingredients)
+        return redirect(index)
+    else:
+        formset = ShoppingListFormSet(queryset=ingredients)
+        context_dict['formset'] = formset
+        context_dict['ingredients'] = ingredients
 
     return render(request, 'cilantro/shopping_list.html', context_dict)
+
+
+def send_to_evernote(ingredients):
+    dev_token = "***REMOVED***"
+    client = EvernoteClient(token=dev_token)
+    note_store = client.get_note_store()
+    note = types.Note()
+    note.title = "Shopping List"
+    note.content = '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">'
+    note.content += '<en-note>'
+    for ing in ingredients:
+        note.content += '<en-todo/>%d%s %s<br/>' % (ing.value, ing.unit, ing.name)
+    note.content += '</en-note>'
+    note_store.createNote(note)

@@ -1,4 +1,5 @@
 from django import forms
+from django.forms.models import modelformset_factory
 from cilantro.models import Category, Recipe, RecipeIngredient
 
 
@@ -29,3 +30,11 @@ class RecipeIngredientForm(forms.ModelForm):
     class Meta:
         model = RecipeIngredient
         fields = ('name', 'amount')
+
+ShoppingListFormSetBase = modelformset_factory(RecipeIngredient, extra=0, fields=('name', 'value', 'unit'))
+
+
+class ShoppingListFormSet(ShoppingListFormSetBase):
+    def add_fields(self, form, index):
+        super(ShoppingListFormSet, self).add_fields(form, index)
+        form.fields['is_checked'] = forms.BooleanField(required=False)
