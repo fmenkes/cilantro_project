@@ -4,9 +4,8 @@
 
 /* Move body down and place content in the middle. */
 body {
-  padding-top: 50px;
   width: auto;
-  max-width: 75em;
+  max-width: 80em;
   margin: auto;
 }
 
@@ -18,6 +17,7 @@ body {
   padding-bottom: 0px;
   border-bottom: 1px solid #eee;
   margin-bottom: 10px;
+  text-align: center;
 }
 
 /*
@@ -49,10 +49,9 @@ body {
     padding: 20px;
     overflow-x: hidden;
     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    background-color: #f5f5f5;
+    background-color: #55AA55;
     border-right: 1px solid #eee;
     margin-top: -20px;
-    margin-bottom: 100px;
     margin-right: 20px;
   }
 }
@@ -67,11 +66,15 @@ body {
   padding-right: 100px;
   padding-left: 40px;
 }
+.nav-sidebar > li > a:hover,
+.nav-sidebar > li > a:focus {
+  background-color: #88CC88;
+}
 .nav-sidebar > .active > a,
 .nav-sidebar > .active > a:hover,
 .nav-sidebar > .active > a:focus {
   color: #fff;
-  background-color: #428bca;
+  background-color: #88CC88;
 }
 
 
@@ -85,7 +88,6 @@ body {
     height: 1000px;
     margin-top: -40px;
     padding-top: 20px;
-    padding-left: 20px;
     bottom: 0;
 }
 
@@ -131,10 +133,10 @@ body {
 
 .footer {
     width: auto;
-    max-width: 1052px;
-    background-color: black;
+    background-color: #004400;
     color: white;
-    border-radius: 4px;
+    border-radius: 2px;
+    padding-left: 5px;
 }
 
 .recipe-left {
@@ -155,6 +157,21 @@ body {
     margin-right: 5px;
 }
 
+
 #shopping-table {
     width:auto;
+}
+
+#cilantro-navbar {
+    background-color: #004400;
+}
+
+#cilantro-logo {
+    margin-top: 5px;
+    margin-left: 20px;
+}
+
+#cilantro-banner {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 5px;
 }

@@ -6,7 +6,8 @@ from django.forms.formsets import formset_factory
 from django.shortcuts import HttpResponse
 from evernote.api.client import EvernoteClient
 import evernote.edam.type.ttypes as types
-import re
+from twilio.rest import TwilioRestClient
+from cilantro_project.keys import evernote_dev_token
 import pdb
 
 #TODO: HOW COULD YOU FORGET ABOUT REQUEST.USER GODDAMN
@@ -14,31 +15,6 @@ import pdb
 
 def index(request):
     return render(request, 'cilantro/index.html', {})
-
-
-def evernote(request):
-    context_dict = {}
-    dev_token = "***REMOVED***"
-    client = EvernoteClient(token=dev_token)
-    user_store = client.get_user_store()
-    user = user_store.getUser()
-    context_dict['username'] = user.username
-
-    return render(request, 'cilantro/evernote.html', context_dict)
-
-
-def send_shopping_to_evernote(request):
-    #pdb.set_trace()
-    dev_token = "***REMOVED***"
-    client = EvernoteClient(token=dev_token)
-    note_store = client.get_note_store()
-    note = types.Note()
-    note.title = "I'm a test note!"
-    note.content = '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">'
-    note.content += '<en-note>Hello, world! I was sent from Cilantro.</en-note>'
-    note_store.createNote(note)
-
-    return render(request, 'cilantro/index.html')
 
 
 def recipe(request, username, category_name_slug, recipe_name_slug):
@@ -169,10 +145,9 @@ def clear_shopping_list(request):
     return HttpResponse(request)
 
 
-def shopping_list(request, username):
+def shopping_list(request):
     context_dict = {}
-    user = User.objects.get_by_natural_key(username)
-    shoplist = Recipe.objects.get(user=user, is_shopping_list=True)
+    shoplist = Recipe.objects.get(user=request.user, is_shopping_list=True)
     ingredients = RecipeIngredient.objects.filter(recipe=shoplist)
     if request.method == 'POST':
         formset = ShoppingListFormSet(request.POST, queryset=ingredients)
@@ -194,8 +169,7 @@ def shopping_list(request, username):
 
 
 def send_to_evernote(ingredients):
-    dev_token = "***REMOVED***"
-    client = EvernoteClient(token=dev_token)
+    client = EvernoteClient(token=evernote_dev_token)
     note_store = client.get_note_store()
     note = types.Note()
     note.title = "Shopping List"

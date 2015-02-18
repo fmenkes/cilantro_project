@@ -1,5 +1,15 @@
 {% extends 'base.html' %}
    {% load static %}
    {% block body_block %}
-   <div class="cilantro-header"><h1>Welcome! Please choose a recipe on the left.</h1></div>
+   {% if not user.is_authenticated %}
+   <img id="cilantro-banner" src="{% static 'images/cilantro-banner.png' %}"/>
+        <div class="container-fluid">
+        <p class="lead">
+            Cilantro is a website that allows you to save recipes into personalized categories, and create your shopping
+            list based on what you want to eat tonight. You can then save the shopping list to your Evernote account and
+            take it to the store!
+        </p></div>
+   {% else %}
+   <div class="cilantro-header"><h1>Welcome, {{ user }}!</h1></div>
+   {% endif %}
    {% endblock %}

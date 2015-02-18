@@ -1,7 +1,0 @@
-
-   {% extends 'base.html' %}
-   {% load static %}
-   {% block body_block %}
-   <div class="cilantro-header"><h1>Welcome {{ username }}!</h1></div>
-           <button class="btn"><a href="{% url 'send_recipe_to_evernote' %}">Send</a></button>
-   {% endblock %}
