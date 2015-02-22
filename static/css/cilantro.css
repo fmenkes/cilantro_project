@@ -63,17 +63,12 @@ body {
   margin-left: -20px;
 }
 .nav-sidebar > li > a {
+  color: #000;
   padding-right: 100px;
   padding-left: 40px;
 }
 .nav-sidebar > li > a:hover,
 .nav-sidebar > li > a:focus {
-  background-color: #88CC88;
-}
-.nav-sidebar > .active > a,
-.nav-sidebar > .active > a:hover,
-.nav-sidebar > .active > a:focus {
-  color: #fff;
   background-color: #88CC88;
 }
 
@@ -121,10 +116,14 @@ body {
     padding-bottom: 10px;
 }
 
+.recipe-item > a {
+    color: #000;
+}
+
 .recipe-item > a:hover,
 .recipe-item > a:focus {
+    color: #eee;
     text-decoration: none;
-    background-color: #eee;
 }
 
 .recipe-ul {

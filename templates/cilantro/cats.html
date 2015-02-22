@@ -2,11 +2,7 @@
 {% if cats %}
     {% for c in cats %}
         {% if c.name != "Shopping Lists" %}
-           {% if c == act_cat %}
-               <li class="active">
-           {% else %}
-               <li>
-           {% endif %}
+           <li>
                <a class="category-item" href="#">{{ c.name }}</a>
                        {% if c == act_cat %}
                            <ul>

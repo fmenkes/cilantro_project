@@ -60,7 +60,7 @@ class RecipeIngredient(models.Model):
     unit = models.CharField(max_length=40, blank=True, default="")
 
     def save(self, *args, **kwargs):
-        """finds the unit in the amount and saves it to the (hidden) unit field."""
+        """finds the unit in the amount and saves it to the (hidden) unit and value fields."""
         # This regex needs lots of work!
         pattern = re.compile(r'(\d+)(\s|\W)*(\D*)$')
         result = pattern.search(str(self.amount))

@@ -6,11 +6,10 @@ from django.forms.formsets import formset_factory
 from django.shortcuts import HttpResponse
 from evernote.api.client import EvernoteClient
 import evernote.edam.type.ttypes as types
-from twilio.rest import TwilioRestClient
 from cilantro_project.keys import evernote_dev_token
 import pdb
 
-#TODO: HOW COULD YOU FORGET ABOUT REQUEST.USER GODDAMN
+#TODO: replace any remaining calls to User with request.user
 
 
 def index(request):
@@ -51,6 +50,7 @@ def add_category(request):
         form = CategoryForm(request.POST)
 
         if form.is_valid():
+            form.instance.user = request.user
             form.save(commit=True)
 
             return index(request)
@@ -70,6 +70,8 @@ def add_recipe(request, category_name_slug):
         ingredients_form = recipe_formset(request.POST)
 
         if recipe_form.is_valid():
+            # TODO: This needs to be replaced along with the shopping list views!
+            recipe_form.instance.user = request.user
             recipe_form.instance.category = cat
             recipe_name = recipe_form.cleaned_data['name']
 
@@ -117,6 +119,7 @@ def add_to_shopping_list(request):
         u_id = request.GET['user_id']
         user = User.objects.get(id=u_id)
         recipe_to_add = Recipe.objects.get(id=r_id)
+        #TODO: Replace this with a call to the user's shopping list category instead!
         shoplist = Recipe.objects.get(user=user, is_shopping_list=True)
     if recipe_to_add and shoplist:
         ingredient_list = RecipeIngredient.objects.filter(recipe=recipe_to_add)
@@ -136,6 +139,7 @@ def clear_shopping_list(request):
     if request.method == 'GET':
         u_id = request.GET['user_id']
         user = User.objects.get(id=u_id)
+        #TODO: Replace this with a call to the user's shopping list category instead!
         shoplist = Recipe.objects.get(user=user, is_shopping_list=True)
 
     if shoplist:
@@ -147,6 +151,8 @@ def clear_shopping_list(request):
 
 def shopping_list(request):
     context_dict = {}
+    #TODO: Replace this with a call to the user's shopping list category instead!
+    # Also, will produce an error if no user is logged in, so fix that!
     shoplist = Recipe.objects.get(user=request.user, is_shopping_list=True)
     ingredients = RecipeIngredient.objects.filter(recipe=shoplist)
     if request.method == 'POST':
