@@ -24,7 +24,7 @@ class Recipe(models.Model):
     category = models.ForeignKey(Category)
     user = models.ForeignKey(User)
     # TODO: the name of recipes should not be unique, but it should be unique to its category.
-    name = models.CharField(max_length=400, unique=True)
+    name = models.CharField(max_length=128, unique=True)
     instructions = models.TextField(blank=True)
     servings = models.IntegerField(blank=True, default=2)
     is_shopping_list = models.BooleanField(default=False)
