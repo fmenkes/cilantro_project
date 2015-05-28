@@ -2,3 +2,5 @@
 db.sqlite3
 keys.py
 keys.pyc
+*.pyc
+.idea
